@@ -1,7 +1,9 @@
 from collections import UserDict
 from datetime import datetime
-import pickle
 import re
+
+
+from storage import Storage
 
 
 class Field:
@@ -36,14 +38,14 @@ class Birthday(Field):
 
 
 class Record:
-    def __init__(self, name, address="", phone=None, email=None, birthday=None):
+    def __init__(self, name, phone=None, email=None, birthday=None, address=""):
         self.name = Name(name)
-        self.address = address
         self.phones = []
         if phone:
             self.add_phone(phone)
         self.email = Email(email) if email else None
         self.birthday = Birthday(birthday) if birthday else None
+        self.address = address
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -59,7 +61,7 @@ class Record:
         phones = ", ".join(p.value for p in self.phones) if self.phones else "—"
         email = self.email.value if self.email else "—"
         birthday = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "—"
-        return f"{self.name.value}: {phones} | Email: {email} | Birthday: {birthday} | Address: {self.address}"
+        return f"Name: {self.name.value}| Phones: {phones} | Email: {email} | Birthday: {birthday} | Address: {self.address}"
 
 
 class ContactBook(UserDict):
@@ -72,22 +74,13 @@ class ContactBook(UserDict):
         self.data[record.name.value] = record
         self.save_data()
 
-    def edit_contact(self, name, **kwargs):
-        record = self.data.get(name)
+    def edit_contact(self, edited_record: Record):
+        record = self.data.get(edited_record.name.value)
         if not record:
             raise KeyError("Контакт не знайдено.")
 
-        if "name" in kwargs and kwargs["name"]:
-            record.name = Name(kwargs["name"])
-        if "address" in kwargs and kwargs["address"]:
-            record.address = kwargs["address"]
-        if "phone" in kwargs and kwargs["phone"]:
-            record.add_phone(kwargs["phone"])
-        if "email" in kwargs and kwargs["email"]:
-            record.email = Email(kwargs["email"])
-        if "birthday" in kwargs and kwargs["birthday"]:
-            record.birthday = Birthday(kwargs["birthday"])
-
+        record = edited_record
+        self.data[record.name.value] = record
         self.save_data()
 
     def delete_contact(self, name):
@@ -98,16 +91,10 @@ class ContactBook(UserDict):
             raise KeyError("Контакт не знайдено.")
 
     def save_data(self):
-        with open(self.filename, "wb") as f:
-            pickle.dump(self, f)
+        Storage.save(self.filename, self.data)
 
     def load_data(self):
-        try:
-            with open(self.filename, "rb") as f:
-                loaded = pickle.load(f)
-                self.data = loaded.data
-        except FileNotFoundError:
-            self.data = {}
+        self.data = Storage.load(self.filename)
 
     def list_contacts(self):
         if not self.data:
