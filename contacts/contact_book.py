@@ -61,7 +61,10 @@ class Record:
         phones = ", ".join(p.value for p in self.phones) if self.phones else "—"
         email = self.email.value if self.email else "—"
         birthday = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "—"
-        return f"Name: {self.name.value}| Phones: {phones} | Email: {email} | Birthday: {birthday} | Address: {self.address}"
+        return (
+            f"Name: {self.name.value}| Phones: {phones} | Email: {email} | "
+            f"Birthday: {birthday} | Address: {self.address}"
+        )
 
 
 class ContactBook(UserDict):

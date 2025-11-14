@@ -9,6 +9,15 @@
 `python main.py`
 або
 `python3 main.py`
+
 3. Вихід з програми:
 наберіть `exit`
 або використайте Ctrl + C/Ctrl + D
+
+#linter
+Встановити лінтера ruff
+`pip install ruff`
+
+Запуск лінтера:
+`ruff check .`
+
