@@ -1,0 +1,9 @@
+[tool.ruff]
+line-length = 120
+target-version = "py313"  #Python 3.13
+
+[tool.ruff.lint]
+extend-select = ["E", "W", "F"]  # базові помилки й попередження PEP8 / pyflakes
+ignore = [
+    "E203"
+]
