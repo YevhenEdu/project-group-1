@@ -16,18 +16,18 @@
 
 # linter
 Створити venv, якщо ще немає
-`python3 -m venv .venv`
+```python3 -m venv .venv```
 
-Встановити лінтера ruff
-`
+Встановити лінтер ruff
+```
 source .venv/bin/activate
 pip install ruff
-`
+```
 
 Запуск лінтера:
-`
+```
 source .venv/bin/activate
 ruff check .
-`
+```
 
 
