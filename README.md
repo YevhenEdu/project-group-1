@@ -14,10 +14,20 @@
 наберіть `exit`
 або використайте Ctrl + C/Ctrl + D
 
-#linter
+# linter
+Створити venv, якщо ще немає
+`python3 -m venv .venv`
+
 Встановити лінтера ruff
-`pip install ruff`
+`
+source .venv/bin/activate
+pip install ruff
+`
 
 Запуск лінтера:
-`ruff check .`
+`
+source .venv/bin/activate
+ruff check .
+`
+
 
