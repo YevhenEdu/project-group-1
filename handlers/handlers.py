@@ -5,6 +5,7 @@ from notes.notes import NotesBook
 class Commands:
 
     _notes_book = NotesBook()
+    _contact_book = ContactBook()
 
     @staticmethod
     def start_command():
@@ -29,10 +30,10 @@ class Commands:
         print()
         Commands.exit_command()
 
+# -------------  Contact block -------------------------
     @staticmethod
     def list_contacts():
-        contact_book = ContactBook()
-        contact_book.list_contacts()
+        Commands._contact_book.list_contacts()
 
     @staticmethod
     def add_contact():
@@ -44,8 +45,7 @@ class Commands:
             address = input("Введить адресу:")
 
             record = Record(name, phone, email, birthday, address)
-            contact_book = ContactBook()
-            contact_book.add_contact(record)
+            Commands._contact_book.add_contact(record)
             print(Colored.green('Новий контакт створено: ' + str(record)))
         except ValueError as e:
             print(Colored.red('Проблема валідації:' + str(e)))
@@ -53,10 +53,9 @@ class Commands:
     @staticmethod
     def edit_contact():
         try:
-            contact_book = ContactBook()
+            contact_book = Commands._contact_book
 
             name = input("Введіть ім'я контакта для редагування:")
-            contact_book.data.get(name)
             if not contact_book.data.get(name):
                 raise KeyError("Контакт не знайдено.")
 
@@ -66,9 +65,61 @@ class Commands:
             address = input("Введить нову адресу:")
 
             record = Record(name, phone, email, birthday, address)
-            contact_book = ContactBook()
             contact_book.edit_contact(record)
             print(Colored.green('Контакт оновлено: ' + str(record)))
+        except ValueError as e:
+            print(Colored.red('Проблема валідації:' + str(e)))
+        except KeyError as e:
+            print(Colored.red('Проблема пошуку:' + str(e)))
+
+    @staticmethod
+    def find_contact():
+        try:
+            contact_book = Commands._contact_book
+
+            name = input("Введіть ім'я контакта для пошуку:")
+            record = contact_book.data.get(name)
+            if not record:
+                raise KeyError("Контакт не знайдено.")
+            else:
+                print(Colored.green('Контакт знайдено: ' + str(record)))
+
+        except ValueError as e:
+            print(Colored.red('Проблема валідації:' + str(e)))
+        except KeyError as e:
+            print(Colored.red('Проблема пошуку:' + str(e)))
+
+    @staticmethod
+    def search_contact():
+        try:
+            contact_book = Commands._contact_book
+
+            value = input("Введіть ключове слово для пошуку:")
+            records = contact_book.search_contacts(value)
+            if not records:
+                raise KeyError("Контакт не знайдено.")
+
+            for record in records:
+                print(str(record))
+
+        except ValueError as e:
+            print(Colored.red('Проблема валідації:' + str(e)))
+        except KeyError as e:
+            print(Colored.red('Проблема пошуку:' + str(e)))
+
+    @staticmethod
+    def upcoming_birthdays():
+        try:
+            contact_book = Commands._contact_book
+
+            value = int(input("Введіть кількість днів до дня народження:"))
+            records = contact_book.birthdays_in_days(value)
+            if not records:
+                raise KeyError("Контакт не знайдено.")
+
+            for record in records:
+                print(str(record))
+
         except ValueError as e:
             print(Colored.red('Проблема валідації:' + str(e)))
         except KeyError as e:
@@ -185,6 +236,9 @@ class Commands:
         'add': add_contact,
         'edit': edit_contact,
         'del': delete_contact,
+        'find': find_contact,
+        'search': search_contact,
+        'upcoming_birthdays': upcoming_birthdays,
 
         # Notes commands
         'notes': list_notes,
