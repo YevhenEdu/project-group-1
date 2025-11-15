@@ -1,6 +1,6 @@
 from contacts.contact_book import ContactBook, Record
 from .colored import Colored
-from notes import NotesBook
+from notes.notes import NotesBook
 
 class Commands:
 
@@ -12,7 +12,7 @@ class Commands:
 
     @staticmethod
     def help_command():
-        commands = '\n'.join([f"/{cmd}" for cmd in Commands.COMMAND_HANDLERS.keys()])
+        commands = '\n'.join([f"{cmd}" for cmd in Commands.COMMAND_HANDLERS.keys()])
         print(Colored.blue(f"Доступні команди:\n{commands}"))
 
     @staticmethod
