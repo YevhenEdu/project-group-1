@@ -57,6 +57,19 @@ class Record:
                 return
         raise ValueError("Старий телефон не знайдено.")
 
+
+    def days_to_birthday(self):
+        if self.birthday is None:
+            return -1
+        today = datetime.now().date()
+        birthday_date = self.birthday.value
+        next_birthday = birthday_date.replace(year=today.year)
+        if next_birthday < today:
+            next_birthday = next_birthday.replace(year=today.year + 1)
+
+        delta = next_birthday - today
+        return delta.days
+
     def __str__(self):
         phones = ", ".join(p.value for p in self.phones) if self.phones else "—"
         email = self.email.value if self.email else "—"
@@ -168,3 +181,16 @@ class ContactBook(UserDict):
             print("Контакти не знайдено.")
 
         return results
+
+    def birthdays_in_days(self, days: int):
+        if not isinstance(days, int) or days < 0:
+            raise ValueError("Кількість днів повинна бути невід'ємним цілим числом.")
+        upcoming_birthdays = []
+
+        for record in self.data.values():
+            if record.birthdays:
+                days_left = record.days_to_birthdays()
+                if days_left == days:
+                    upcoming_birthdays.append(record)
+
+        return upcoming_birthdays
