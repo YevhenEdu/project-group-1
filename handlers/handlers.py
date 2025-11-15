@@ -176,6 +176,7 @@ class Commands:
                 print(Colored.blue(f"- {note.title}"))
 # -------------------- NOTES END -----------------------------------------
 
+    # Dictionary mapping command names to their handler functions
     COMMAND_HANDLERS = {
         'help': help_command,
         'exit': exit_command,
