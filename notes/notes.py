@@ -1,5 +1,7 @@
-import pickle
 from datetime import datetime
+
+from storage import Storage
+
 
 class Note:
     def __init__(self, title: str, text: str, tags=None):
@@ -19,18 +21,13 @@ class Note:
 
 
 class NotesBook:
-    FILE = "notes.pkl"
+    FILENAME = "notes.pkl"
 
     def __init__(self):
-        try:
-            with open(self.FILE, "rb") as f:
-                self.notes = pickle.load(f)
-        except FileNotFoundError:
-            self.notes = []
+        self.notes = Storage.load(self.FILENAME)
 
     def save(self):
-        with open(self.FILE, "wb") as f:
-            pickle.dump(self.notes, f)
+        Storage.save(self.FILENAME, self.notes)
 
     # CREATE
     def add_note(self, title, text, tags):

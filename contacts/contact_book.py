@@ -123,8 +123,7 @@ class ContactBook(UserDict):
         query = query.lower().strip()
         results = []
         if not query:
-            print(" Запит для пошуку не може бути порожнім.")
-            return results
+            raise KeyError("Запит для пошуку не може бути порожнім.")
 
         for record in self.data.values():
             search_fields = [
@@ -140,8 +139,9 @@ class ContactBook(UserDict):
             if any(query in field for field in search_fields):
                 results.append(record)
             if not results:
-                print("Контакти не знайдено.")
+                raise KeyError("Контакти не знайдено.")
             return results
+        return None
 
     def filter_contacts_by_field(self, field_name: str, value: str):
         field_name = field_name.lower().strip()
@@ -149,7 +149,7 @@ class ContactBook(UserDict):
         results = []
 
         if not field_name or not value:
-            print("Назва поля та значення для фільтрації не можуть бути порожніми.")
+            raise KeyError("Назва поля та значення для фільтрації не можуть бути порожніми.")
             return []
 
         for record in self.data.values():
@@ -174,11 +174,11 @@ class ContactBook(UserDict):
                     results.append(record)
 
             else:
-                print(f"Невідоме поле для фільтрації: {field_name}")
+                raise KeyError(f"Невідоме поле для фільтрації: {field_name}")
                 return []
 
         if not results:
-            print("Контакти не знайдено.")
+            raise KeyError("Контакти не знайдено.")
 
         return results
 
@@ -188,8 +188,8 @@ class ContactBook(UserDict):
         upcoming_birthdays = []
 
         for record in self.data.values():
-            if record.birthdays:
-                days_left = record.days_to_birthdays()
+            if record.birthday:
+                days_left = record.days_to_birthday()
                 if days_left == days:
                     upcoming_birthdays.append(record)
 
