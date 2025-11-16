@@ -10,3 +10,7 @@ class Colored:
     @staticmethod
     def blue(text):
         return '\033[94m' + text + '\033[0m'
+
+    @staticmethod
+    def yellow(text):
+        return '\033[93m' + text + '\033[0m'

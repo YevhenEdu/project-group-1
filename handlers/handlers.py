@@ -1,6 +1,7 @@
 from contacts.contact_book import ContactBook, Record
 from .colored import Colored
 from notes.notes import NotesBook
+from .art import logo, help_message
 
 class Commands:
 
@@ -9,12 +10,14 @@ class Commands:
 
     @staticmethod
     def start_command():
+        print(Colored.yellow(logo))
+        print()
         print(Colored.green("Привіт! Це бот-помічник!"))
+        Commands.help_command()
 
     @staticmethod
     def help_command():
-        commands = '\n'.join([f"{cmd}" for cmd in Commands.COMMAND_HANDLERS.keys()])
-        print(Colored.blue(f"Доступні команди:\n{commands}"))
+        print(Colored.blue(help_message))
 
     @staticmethod
     def invalid_command():
