@@ -9,7 +9,7 @@ class Storage:
                 loaded = pickle.load(file)
                 return loaded
         except FileNotFoundError:
-            return []
+            return {}
 
     @staticmethod
     def save(filename, data=None):
